@@ -1,5 +1,7 @@
 import 'package:fashion_store/view/home/widget/appbarWidget.dart';
 import 'package:fashion_store/view/home/widget/banner.dart';
+import 'package:fashion_store/view/home/widget/categoryWidget.dart';
+import 'package:fashion_store/view/home/widget/productWidget.dart';
 import 'package:fashion_store/view/home/widget/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -89,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
                   "Abhishek Mishra",
                   style: TextStyle(fontSize: 18),
                 ),
-                
+
                 accountEmail: Text("abhishekm977@gmail.com"),
                 currentAccountPictureSize: Size.square(50),
               ), //UserAccountDrawerHeader
@@ -147,6 +149,29 @@ class _HomeViewState extends State<HomeView> {
               child: Search(),
             ),
             BannerWidget(),
+            CategoryWidget(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                children: [
+                  Text(
+                    "Product",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Spacer(),
+                  Icon(Icons.category),
+                  SizedBox(width: 10),
+                  Text(
+                    "ທັງໝົດ",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            ProductWidget(),
           ],
         ),
       ),
