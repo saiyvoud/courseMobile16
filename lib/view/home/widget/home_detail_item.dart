@@ -1,3 +1,4 @@
+import 'package:fashion_store/view/cart/cart.dart';
 import 'package:flutter/material.dart';
 
 class HomeDetailItem extends StatelessWidget {
@@ -39,7 +40,12 @@ class HomeDetailItem extends StatelessWidget {
           right: 10,
           child: GestureDetector(
             onTap: () {
-              // value.clearSum();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Cart(),
+                ),
+              );
             },
             child: Container(
               height: 40,
@@ -49,7 +55,7 @@ class HomeDetailItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
-                Icons.favorite,
+                Icons.shopping_bag,
                 color: Colors.red.shade300,
                 size: 25,
               ),
