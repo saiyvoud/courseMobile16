@@ -1,0 +1,22 @@
+PODS:
+  - animated_rating_stars (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - animated_rating_stars (from `.symlinks/plugins/animated_rating_stars/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  animated_rating_stars:
+    :path: ".symlinks/plugins/animated_rating_stars/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  animated_rating_stars: 4627b871e2cfeddfe811952f5b3e9dc62a9bbe46
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+
+PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+
+COCOAPODS: 1.14.3
