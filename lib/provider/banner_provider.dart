@@ -4,17 +4,21 @@ import 'package:flutter/material.dart';
 class BannerProvider extends ChangeNotifier {
   final bannerService = BannerService();
   bool _loading = false;
+  List<dynamic> _banner = [];
   get loading => _loading;
-  Future<void> getBanner ()async{
-    _loading = false;
+  List<dynamic> get banner => _banner;
+
+  Future<void> getBanner() async {
+    _loading = true;
     try {
       final result = await bannerService.getBanner();
-      if(result !=null){
-        _loading = true;
+      if (result != null) {
+        _loading = false;
+        _banner = result;
         notifyListeners();
       }
     } catch (e) {
-      _loading = true;
+      _loading = false;
       notifyListeners();
     }
   }

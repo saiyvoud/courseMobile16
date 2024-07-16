@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fashion_store/provider/banner_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BannerWidget extends StatefulWidget {
   const BannerWidget({super.key});
@@ -9,30 +11,36 @@ class BannerWidget extends StatefulWidget {
 }
 
 class _BannerWidgetState extends State<BannerWidget> {
-  List<String> _banner = [
-    "assets/images/banner01.png",
-    "assets/images/banner02.png",
-    "assets/images/banner03.png",
-    "assets/images/banner04.png",
-    "assets/images/banner05.png",
-    "assets/images/banner06.png",
-  ];
+  // List<String> _banner = [
+  //   "assets/images/banner01.png",
+  //   "assets/images/banner02.png",
+  //   "assets/images/banner03.png",
+  //   "assets/images/banner04.png",
+  //   "assets/images/banner05.png",
+  //   "assets/images/banner06.png",
+  // ];
   int currentndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        banner(context),
-        incator(),
-      ],
-    );
+    return Consumer<BannerProvider>(builder: (context, bannerProvider, child) {
+      return bannerProvider.loading == true
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                banner(context, bannerProvider),
+                incator(bannerProvider),
+              ],
+            );
+    });
   }
 
-  incator() {
+  incator(BannerProvider bannerProvider) {
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _banner.map((e) {
-          final index = _banner.lastIndexOf(e);
+        children: bannerProvider.banner.map((e) {
+          final index = bannerProvider.banner.lastIndexOf(e);
           print("index==>$index");
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -50,7 +58,7 @@ class _BannerWidgetState extends State<BannerWidget> {
         }).toList());
   }
 
-  Container banner(BuildContext context) {
+  Container banner(BuildContext context, BannerProvider bannerProvider) {
     return Container(
         height: 140,
         width: double.infinity,
@@ -65,13 +73,13 @@ class _BannerWidgetState extends State<BannerWidget> {
               });
             },
           ),
-          items: _banner.map((i) {
+          items: bannerProvider.banner.map((i) {
             return Container(
                 width: MediaQuery.of(context).size.width,
                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                 decoration: BoxDecoration(color: Colors.amber),
-                child: Image.asset(
-                  i,
+                child: Image.network(
+                  i['image'],
                   fit: BoxFit.cover,
                 ));
           }).toList(),

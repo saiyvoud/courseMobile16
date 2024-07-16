@@ -5,6 +5,7 @@ class BannerService {
    Future<List<dynamic>?> getBanner ()async{
     try {
       final response = await dio.get(ApiPath.getBanner);
+      print(response);
       if(response.data['status'] == true){
         return response.data['data'];
       }
