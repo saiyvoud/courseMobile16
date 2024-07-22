@@ -1,10 +1,13 @@
+import 'package:fashion_store/provider/category_provider.dart';
 import 'package:fashion_store/view/home/widget/appbarWidget.dart';
 import 'package:fashion_store/view/home/widget/banner.dart';
 import 'package:fashion_store/view/home/widget/categoryWidget.dart';
+import 'package:fashion_store/view/home/widget/multiProduct.dart';
 import 'package:fashion_store/view/home/widget/productWidget.dart';
 import 'package:fashion_store/view/home/widget/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -171,7 +174,12 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-            ProductWidget(),
+            Consumer<CategoryProvider>(builder: (context, value, child) {
+              if (value.currentIndex == -1) {
+                return ProductWidget();
+              }
+              return MultiProduct();
+            }),
           ],
         ),
       ),

@@ -1,16 +1,21 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:animated_rating_stars/animated_rating_stars.dart';
+import 'package:fashion_store/components/loading.dart';
+import 'package:fashion_store/provider/cart_provider.dart';
 import 'package:fashion_store/view/home/widget/home_detail_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class HomeDetail extends StatefulWidget {
+  final dynamic data;
   final String image;
 
   const HomeDetail({
     super.key,
     required this.image,
+    required this.data,
   });
 
   @override
@@ -18,7 +23,7 @@ class HomeDetail extends StatefulWidget {
 }
 
 class _HomeDetailState extends State<HomeDetail> {
-  List<String> data = [
+  List<String> size = [
     "Size: S",
     "Size: M",
     "Size: L",
@@ -80,7 +85,7 @@ class _HomeDetailState extends State<HomeDetail> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "name",
+                                    widget.data['name'],
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -89,7 +94,7 @@ class _HomeDetailState extends State<HomeDetail> {
                                   Container(
                                       width: 220,
                                       child: Text(
-                                        "detail",
+                                        widget.data['detail'],
                                         maxLines: 3,
                                         overflow: TextOverflow.ellipsis,
                                       )),
@@ -97,7 +102,7 @@ class _HomeDetailState extends State<HomeDetail> {
                               ),
                               Spacer(),
                               Text(
-                                "200,000 Lak",
+                                "${widget.data['price']} Lak",
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -151,7 +156,7 @@ class _HomeDetailState extends State<HomeDetail> {
                         child: ListView.builder(
                             shrinkWrap: true,
                             primary: false,
-                            itemCount: data.length,
+                            itemCount: size.length,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               return Padding(
@@ -179,7 +184,7 @@ class _HomeDetailState extends State<HomeDetail> {
                                                   )),
                                         child: Center(
                                           child: Text(
-                                            data[index],
+                                            size[index],
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: currenIndex == index
@@ -303,75 +308,89 @@ class _HomeDetailState extends State<HomeDetail> {
             ],
           ),
         ),
-        bottomNavigationBar: Container(
-          height: 100,
-          //decoration: BoxDecoration(color: Colors.cyan),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => CartDetail(),
-                    //   ),
-
-                    // final result = await HiveDatabase.getCart();
-
-                    // if (result!
-                    //     .contains(value.products[widget.index]['_id'])) {
-                    //   cart.addQtyCart(qty: _amount);
-                    //   print("======>update");
-                    // } else {
-                    // cart.addNewCart(
-                    //   productId: value.products[widget.index]['_id'],
-                    //   name: value.products[widget.index]['name'],
-                    //   detail: value.products[widget.index]['detail'],
-                    //   qty: _amount,
-                    //   price: value.products[widget.index]['price'],
-                    //   image: value.products[widget.index]['image'],
-                    // );
-                    print("======>add");
-                    // }
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.add_shopping_cart,color: Colors.white,size: 30,)
-                    ),
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  height: 50,
-                  width: 300,
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade400,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "ຊື້ສິນຄ້າເລີຍ",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+        bottomNavigationBar: Consumer<CartProvider>(
+          builder: (context,cartProvider,child) {
+            return Container(
+              height: 100,
+              //decoration: BoxDecoration(color: Colors.cyan),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        Loading(context);
+                        cartProvider.saveCart(
+                            productId: widget.data['_id'],
+                            name: widget.data['name'],
+                            detail: widget.data['detail'],
+                            amount: _amount,
+                            price: widget.data['price'],
+                            image: widget.data['image'],
+                            size: size[currenIndex],
+                            );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (_) => CartDetail(),
+                        //   ),
+            
+                        // final result = await HiveDatabase.getCart();
+            
+                        // if (result!
+                        //     .contains(value.products[widget.index]['_id'])) {
+                        //   cart.addQtyCart(qty: _amount);
+                        //   print("======>update");
+                        // } else {
+                        // cart.addNewCart(
+                        //   productId: value.products[widget.index]['_id'],
+                        //   name: value.products[widget.index]['name'],
+                        //   detail: value.products[widget.index]['detail'],
+                        //   qty: _amount,
+                        //   price: value.products[widget.index]['price'],
+                        //   image: value.products[widget.index]['image'],
+                        // );
+                        print("======>add");
+                        // }
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.amber,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.add_shopping_cart,color: Colors.white,size: 30,)
+                        ),
                       ),
                     ),
-                  ),
+                    Spacer(),
+                    Container(
+                      height: 50,
+                      width: 300,
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade400,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "ຊື້ສິນຄ້າເລີຍ",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          }
         ));
   }
 }

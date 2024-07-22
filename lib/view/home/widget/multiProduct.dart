@@ -3,14 +3,14 @@ import 'package:fashion_store/view/home/home_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProductWidget extends StatefulWidget {
-  const ProductWidget({super.key});
+class MultiProduct extends StatefulWidget {
+  const MultiProduct({super.key});
 
   @override
-  State<ProductWidget> createState() => _ProductWidgetState();
+  State<MultiProduct> createState() => _MultiProductState();
 }
 
-class _ProductWidgetState extends State<ProductWidget> {
+class _MultiProductState extends State<MultiProduct> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (context, product, child) {
@@ -20,7 +20,7 @@ class _ProductWidgetState extends State<ProductWidget> {
       return GridView.builder(
         shrinkWrap: true,
         primary: false,
-        itemCount: product.product.length,
+        itemCount: product.productBy.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 2,
@@ -35,7 +35,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                 MaterialPageRoute(
                   builder: (context) => HomeDetail(
                     image: product.product[index]['image'],
-                     data: product.product[index],
+                    data: product.product[index],
                   ),
                 ),
               );
@@ -56,13 +56,13 @@ class _ProductWidgetState extends State<ProductWidget> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
-                        product.product[index]['name'],
+                        product.productBy[index]['name'],
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
-                        product.product[index]['detail'],
+                        product.productBy[index]['detail'],
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -73,7 +73,8 @@ class _ProductWidgetState extends State<ProductWidget> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            product.product[index]['price'].toString() + " LAK",
+                            product.productBy[index]['price'].toString() +
+                                " LAK",
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: 18,

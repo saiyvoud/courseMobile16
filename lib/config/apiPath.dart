@@ -10,5 +10,5 @@ class ApiPath {
   static String getOneCategory = "${baseUrl}/category/getOne/";
   //------------ product --------
   static String getProduct = "${baseUrl}/product/getAll";
-  static String getProductBy = "${baseUrl}/product/getProductByCategory/";
+  static String getProductBy = "${baseUrl}/product/getByCategory/";
 }
