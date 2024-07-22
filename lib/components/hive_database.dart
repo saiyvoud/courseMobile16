@@ -31,7 +31,34 @@ class HiveDatabase {
     return data[0];
   }
 
-    static Future<List<dynamic>?> getCart() async {
+  static Future<bool?> deleteCart({required int id}) async {
+    try {
+      final myBox = await Hive.box<Map>("cart");
+      myBox.deleteAt(id);
+      await myBox.values.toList();
+
+      return true;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<bool?> updateAmount({required int amount}) async {
+    try {
+      final myBox = await Hive.openBox<Map>('cart');
+
+      await myBox.put("cart", {
+        "amount": amount,
+      });
+      await myBox.values.toList();
+
+      return true;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<List<dynamic>?> getCart() async {
     try {
       final myBox = await Hive.openBox<Map>('cart');
       final data = await myBox.values.toList();
@@ -42,7 +69,7 @@ class HiveDatabase {
   }
 
   // ------ save ----------
- static Future<bool?> saveProfile({
+  static Future<bool?> saveProfile({
     required String data,
   }) async {
     try {
@@ -57,7 +84,7 @@ class HiveDatabase {
     }
   }
 
- static Future<bool?> saveToken({
+  static Future<bool?> saveToken({
     required String token,
     required String refreshToken,
   }) async {
@@ -74,7 +101,7 @@ class HiveDatabase {
     }
   }
 
- static Future<bool?> saveCart({
+  static Future<bool?> saveCart({
     required String productId,
     required String name,
     required String detail,

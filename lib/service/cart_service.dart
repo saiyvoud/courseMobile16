@@ -4,6 +4,7 @@ class CartService {
   Future<List<dynamic>?> getCart() async {
     try {
       final result = await HiveDatabase.getCart();
+      print(result);
       if (result!.length > 0) {
         return result;
       }
@@ -12,7 +13,26 @@ class CartService {
       rethrow;
     }
   }
-
+  Future<bool?> deleteCart ({required int id})async{
+    try {
+      final result = await HiveDatabase.deleteCart(id: id);
+      if(result == true){
+        return true;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+//  Future<bool?> updateAmount({
+//   required int amount
+//  })async{
+//   try {
+//     final result = await HiveDatabase.updateAmount(amount: amount);
+//   } catch (e) {
+    
+//   }
+//  }
   Future<bool?> saveCart({
     required String productId,
     required String name,

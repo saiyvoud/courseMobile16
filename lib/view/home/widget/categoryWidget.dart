@@ -59,6 +59,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
             Row(
               children: category.category.map((e) {
                 final index = category.category.indexOf(e);
+            
                 return Consumer<ProductProvider>(
                     builder: (context, product, child) {
                   return GestureDetector(
@@ -72,8 +73,8 @@ class _CategoryWidgetState extends State<CategoryWidget> {
                       child: Container(
                         decoration: BoxDecoration(
                             color: category.currentIndex == index
-                                ? Colors.red
-                                : Colors.amber,
+                                ? Colors.red 
+                                :  Colors.amber,
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                           padding: EdgeInsets.all(10),
