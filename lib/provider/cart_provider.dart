@@ -14,7 +14,7 @@ class CartProvider extends ChangeNotifier {
 
  calulatorSum(int amount, int price) {
     _total += amount * price;
-    // notifyListeners();
+    //notifyListeners();
   }
   clearSum() {
     _total = 0;
@@ -22,8 +22,7 @@ class CartProvider extends ChangeNotifier {
   }
   Future<void> getCart() async {
     _loading = true;
-    notifyListeners();
-        // clearSum();
+
     try {
      
       final result = await cartService.getCart();

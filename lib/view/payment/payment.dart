@@ -152,6 +152,7 @@ class _PaymentState extends State<Payment> {
                 ],
               ),
               SizedBox(height: 10),
+              
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(
@@ -164,6 +165,7 @@ class _PaymentState extends State<Payment> {
                   ],
                 ),
               ),
+             
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Row(

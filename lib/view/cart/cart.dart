@@ -12,11 +12,22 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<CartProvider>(context, listen: false)..getCart();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<CartProvider>(builder: (context, cartProvider, child) {
       // cartProvider.clearSum();
-      if(cartProvider.loading == true){
-        return Scaffold(body: Center(child: CircularProgressIndicator(),),);
+      if (cartProvider.loading == true) {
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       }
       return Scaffold(
         appBar: AppBar(
@@ -50,7 +61,8 @@ class _CartState extends State<Cart> {
                 itemBuilder: (context, index) {
                   final data = cartProvider.carts;
                  
-                  cartProvider.calulatorSum(data[index]['amount'],data[index]['price']);
+                  cartProvider.calulatorSum(
+                      data[index]['amount'], data[index]['price']);
                   return Column(
                     children: [
                       Container(
@@ -113,9 +125,8 @@ class _CartState extends State<Cart> {
                                 ],
                               ),
                               IconButton(
-                                  onPressed: () async{
-                                   await cartProvider.deleteCart(id: index);
-                                   
+                                  onPressed: () async {
+                                    await cartProvider.deleteCart(id: index);
                                   },
                                   icon: Icon(
                                     Icons.close,
@@ -128,68 +139,65 @@ class _CartState extends State<Cart> {
                     ],
                   );
                 }),
-        bottomNavigationBar:
-          
-           Container(
-            height: 140,
-            // decoration: BoxDecoration(color: Colors.red),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        "ລາຄາທັງໝົດ:",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                      Spacer(),
-                      Text(
-                        "${cartProvider.total} LAK",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red),
-                      ),
-                    ],
-                  ),
+        bottomNavigationBar: Container(
+          height: 140,
+          // decoration: BoxDecoration(color: Colors.red),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "ລາຄາທັງໝົດ:",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                    Spacer(),
+                    Text(
+                      "${cartProvider.total} LAK",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Payment(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      height: 60,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "ຊຳລະເງີນ",
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Payment(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    height: 60,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Center(
+                      child: Text(
+                        "ຊຳລະເງີນ",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-      
+        ),
       );
     });
   }
