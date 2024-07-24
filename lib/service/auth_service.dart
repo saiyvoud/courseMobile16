@@ -1,11 +1,50 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:fashion_store/components/hive_database.dart';
 import 'package:http/http.dart' as http;
 import 'package:fashion_store/config/apiPath.dart';
 
 class AuthService {
   final Dio dio = Dio();
+   Future<bool> refreshToken() async {
+    try {
+      final result = await HiveDatabase.getToken();
+      final data = {
+        "refreshToken": result['refreshToken'],
+      };
+      final response = await dio.post(
+        ApiPath.refreshToken,
+        data: data,
+      );
+      print(response.data);
+      if (response.data['status'] == true) {
+        await HiveDatabase.saveToken(
+          token: response.data['data']['token'],
+          refreshToken: response.data['data']['refreshToken'],
+        );
+        return true;
+      }
+      return false;
+    } catch (e) { 
+      return false;
+    }
+  }
+
+   Future<bool> validateToken() async {
+    try {
+      final result = await HiveDatabase.getToken();
+      print(result);
+      if (result == null || result['token'].toString().isEmpty) {
+        return false;
+      }
+      print(result);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
   Future<dynamic>? login({
     required String phoneNumber,
     required String password,
@@ -23,16 +62,15 @@ class AuthService {
         body: data,
         headers: header,
       );
-      // final response = await dio.post(
-      //   ApiPath.login,
-      //   data: data,
-      //   options: Options(
-      //     headers: {'Content-Type': 'application/json'},
-      //   ),
-      // );
+
       print(response.body);
-       final newData = jsonDecode(response.body);
+      final newData = jsonDecode(response.body);
       if (newData['status'] == true) {
+        await HiveDatabase.saveProfile(data: jsonEncode(newData['data']));
+        await HiveDatabase.saveToken(
+          token: newData['data']['token'],
+          refreshToken: newData['data']['refreshToken'],
+        );
         return newData['data'];
       } else {
         return null;

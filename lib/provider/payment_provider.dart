@@ -13,9 +13,12 @@ class PaymentProvider extends ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
   dynamic _address;
+  List<dynamic> _addressByUser = [];
   List<dynamic> _addresies = [];
   List<dynamic> get addresies => _addresies;
+  List<dynamic> get addressByUser => _addressByUser; 
   get address => _address;
+
   Future<void> payment({
     required String orderId,
     required int totalPrice,
@@ -86,6 +89,20 @@ class PaymentProvider extends ChangeNotifier {
       final result = await paymentService.getOneAddress(id: id);
       if (result == true) {
         _address = result!;
+        _loading = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+  Future<void> getByUser ()async{
+    _loading = true;
+    try {
+      final result = await paymentService.getByUser();
+      if(result == true){
+        _addressByUser = result!;
         _loading = false;
         notifyListeners();
       }

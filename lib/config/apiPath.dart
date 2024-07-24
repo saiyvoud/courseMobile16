@@ -6,6 +6,7 @@ class ApiPath {
   static String updateProfile = "${baseUrl}/user/updateProfile";
   static String chanagePassword = "${baseUrl}/user/changePassword";
   static String updateProfileImage = "${baseUrl}/user/updatedProfileImage";
+  static String refreshToken = "${baseUrl}/user/refreshToken";
   //------------ banner --------
   static String getBanner = "${baseUrl}/banner/getAll";
   //------------ category --------
@@ -18,9 +19,10 @@ class ApiPath {
   static String addAddress = "${baseUrl}/address/insert";
   static String getAllAddress = "${baseUrl}/address/getAll";
   static String getOneAddress = "${baseUrl}/address/getOne/";
+  static String getAddressByUser = "${baseUrl}/address/getByUser";
   // -------- payment ------
   static String payment = "${baseUrl}/payment/insert";
   static String getOrder = "${baseUrl}/order/getAll";
   static String getOneOrder = "${baseUrl}/order/getOne/";
-  static String getOrderByStatus = "${baseUrl}/order/status"; 
+  static String getOrderByStatus = "${baseUrl}/order/status";
 }

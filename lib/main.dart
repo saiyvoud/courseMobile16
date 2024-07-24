@@ -7,6 +7,7 @@ import 'package:fashion_store/provider/product_provider.dart';
 import 'package:fashion_store/router/router.dart';
 import 'package:fashion_store/view/auth/login.dart';
 import 'package:fashion_store/view/home/home.dart';
+import 'package:fashion_store/view/splash/splashScreen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -49,7 +50,8 @@ class MyApp extends StatelessWidget {
       scaffoldMessengerKey: MessageHepler.key,
       navigatorKey: NavigationService.navigationKey,
       onGenerateRoute: RouteAPI.generateRoutes,
-      home: HomeView(),
+      initialRoute: RouteAPI.splash,
+      home: SplashScreen(),
     );
   }
 }

@@ -28,6 +28,7 @@ class HiveDatabase {
   static Future<dynamic> getToken() async {
     final userBox = await box!.openBox<Map>('auth');
     final data = await userBox.getAll(['token']);
+    print("===>${data[0]}");
     return data[0];
   }
 
@@ -73,7 +74,7 @@ class HiveDatabase {
     required String data,
   }) async {
     try {
-      final userBox = await box!.openBox('auth');
+      final userBox = await box!.openBox<Map>('auth');
       await userBox.put("user", {
         "data": data,
       });
@@ -89,11 +90,12 @@ class HiveDatabase {
     required String refreshToken,
   }) async {
     try {
-      final userBox = await box!.openBox('auth');
+      final userBox = await box!.openBox<Map>('auth');
       await userBox.put("token", {
         "token": token,
         "refreshToken": refreshToken,
       });
+      
       return true;
     } catch (e) {
       print(e);

@@ -11,6 +11,22 @@ class AuthProvider extends ChangeNotifier {
   final authService = AuthService();
   dynamic get userData => _userData;
 
+   Future<void> validateToken() async {
+    final result = await authService.validateToken();
+    if (result == true) {
+      navService.pushNamedAndRemoveUntil(RouteAPI.home);
+    } else {
+      refreshToken();
+    }
+  }
+  Future<void> refreshToken() async {
+    final result = await authService.refreshToken();
+    if (result == true) {
+      navService.pushNamedAndRemoveUntil(RouteAPI.home);
+    } else {
+      navService.pushNamedAndRemoveUntil(RouteAPI.login);
+    }
+  }
   Future<void> login({
     required String phoneNumber,
     required String password,
