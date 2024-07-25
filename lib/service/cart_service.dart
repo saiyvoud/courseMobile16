@@ -4,7 +4,7 @@ class CartService {
   Future<List<dynamic>?> getCart() async {
     try {
       final result = await HiveDatabase.getCart();
-      print(result);
+     
       if (result!.length > 0) {
         return result;
       }

@@ -6,7 +6,7 @@ class ProductService {
   Future<List<dynamic>?> getProduct() async {
     try {
       final response = await dio.get(ApiPath.getProduct);
-      print(response);
+     
       if (response.data['status'] == true) {
         return response.data['data'];
       }
@@ -20,7 +20,7 @@ class ProductService {
    }) async {
     try {
       final response = await dio.get(ApiPath.getProductBy + id);
-      print(response);
+     
       if (response.data['status'] == true) {
         return response.data['data'];
       }

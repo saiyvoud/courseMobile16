@@ -28,7 +28,7 @@ class HiveDatabase {
   static Future<dynamic> getToken() async {
     final userBox = await box!.openBox<Map>('auth');
     final data = await userBox.getAll(['token']);
-    print("===>${data[0]}");
+    print("===>Token${data[0]}");
     return data[0];
   }
 

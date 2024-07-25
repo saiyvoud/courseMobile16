@@ -3,6 +3,7 @@ import 'package:fashion_store/components/messageHelper.dart';
 import 'package:fashion_store/provider/auth_provider.dart';
 import 'package:fashion_store/provider/banner_provider.dart';
 import 'package:fashion_store/provider/category_provider.dart';
+import 'package:fashion_store/provider/payment_provider.dart';
 import 'package:fashion_store/provider/product_provider.dart';
 import 'package:fashion_store/router/router.dart';
 import 'package:fashion_store/view/auth/login.dart';
@@ -35,6 +36,7 @@ void main() async {
         create: (_) => ProductProvider()..getProduct(),
       ),
       ChangeNotifierProvider(create: (_) => CartProvider()),
+      ChangeNotifierProvider(create: (_) => PaymentProvider()),
     ],
     child: MyApp(),
   ));

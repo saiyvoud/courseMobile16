@@ -16,7 +16,7 @@ class PaymentProvider extends ChangeNotifier {
   List<dynamic> _addressByUser = [];
   List<dynamic> _addresies = [];
   List<dynamic> get addresies => _addresies;
-  List<dynamic> get addressByUser => _addressByUser; 
+  List<dynamic> get addressByUser => _addressByUser;
   get address => _address;
 
   Future<void> payment({
@@ -97,13 +97,16 @@ class PaymentProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  Future<void> getByUser ()async{
+
+  Future<void> getByUser() async {
     _loading = true;
     try {
       final result = await paymentService.getByUser();
-      if(result == true){
-        _addressByUser = result!;
+    
+      if (result == true) {
         _loading = false;
+        _addressByUser = result!;
+        print("=====>${_addressByUser}");
         notifyListeners();
       }
     } catch (e) {

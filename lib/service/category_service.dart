@@ -6,7 +6,7 @@ class CategoryService {
   Future<List<dynamic>?> getCategory() async {
     try {
       final response = await dio.get(ApiPath.getCategory);
-      print(response);
+     
       if (response.data['status'] == true) {
         return response.data['data'];
       }
@@ -20,7 +20,7 @@ class CategoryService {
    }) async {
     try {
       final response = await dio.get(ApiPath.getOneCategory + id);
-      print(response);
+     
       if (response.data['status'] == true) {
         return response.data['data'];
       }
