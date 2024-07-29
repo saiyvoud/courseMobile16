@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:fashion_store/components/messageHelper.dart';
 import 'package:fashion_store/service/payment_service.dart';
 import 'package:flutter/material.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
 
 class PaymentProvider extends ChangeNotifier {
   final village = TextEditingController();
@@ -58,11 +60,15 @@ class PaymentProvider extends ChangeNotifier {
         latitude: latitude,
         longitude: longitude,
       );
+      navService.goBack();
       if (result == true) {
+        MessageHepler.showSnackBarMessage(isSuccess: true, message: "Success");
+        getByUser();
         _loading = false;
         notifyListeners();
       }
     } catch (e) {
+        MessageHepler.showSnackBarMessage(isSuccess: false, message: "Faild");
       _loading = false;
       notifyListeners();
     }
@@ -102,11 +108,11 @@ class PaymentProvider extends ChangeNotifier {
     _loading = true;
     try {
       final result = await paymentService.getByUser();
-    
-      if (result == true) {
+
+      if (result!.length > 0) {
         _loading = false;
-        _addressByUser = result!;
-        print("=====>${_addressByUser}");
+        _addressByUser = result;
+
         notifyListeners();
       }
     } catch (e) {

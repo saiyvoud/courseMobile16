@@ -9,9 +9,11 @@ class AuthProvider extends ChangeNotifier {
   // send parameter out side it'has `get =>`
   dynamic _userData;
   final authService = AuthService();
+  bool _loading = false;
+  bool get loading => _loading;
   dynamic get userData => _userData;
 
-   Future<void> validateToken() async {
+  Future<void> validateToken() async {
     final result = await authService.validateToken();
     if (result == true) {
       navService.pushNamedAndRemoveUntil(RouteAPI.home);
@@ -19,6 +21,24 @@ class AuthProvider extends ChangeNotifier {
       refreshToken();
     }
   }
+
+  Future<void> logout() async {
+    _loading = true;
+    try {
+      print("======>ok");
+      final result = await authService.logout();
+      navService.goBack();
+      if (result == true) {
+        _loading = false;
+        navService.pushNamed(RouteAPI.login);
+        
+      }
+    } catch (e) {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> refreshToken() async {
     final result = await authService.refreshToken();
     if (result == true) {
@@ -27,6 +47,7 @@ class AuthProvider extends ChangeNotifier {
       navService.pushNamedAndRemoveUntil(RouteAPI.login);
     }
   }
+
   Future<void> login({
     required String phoneNumber,
     required String password,

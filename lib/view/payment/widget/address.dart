@@ -55,9 +55,9 @@ class _AddressViewState extends State<AddressView> {
             )),
       ),
       body: Consumer<PaymentProvider>(builder: (context, address, child) {
-        // if (address.loading == true) {
-        //   return Center(child: CircularProgressIndicator());
-        // }
+        if (address.loading == true) {
+          return Center(child: CircularProgressIndicator());
+        }
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -101,7 +101,7 @@ class _AddressViewState extends State<AddressView> {
                                 Icon(Icons.pin_drop_outlined),
                                 SizedBox(width: 10),
                                 Text(
-                                    "ບ້ານຫ້ວຍຫົງ ເມືອງ ຈັນທະບູລີ ນະຄອນຫຼວງວຽງຈັນ"),
+                                    "ບ້ານ ${address.addressByUser[index]['village']} ເມືອງ ${address.addressByUser[index]['district']} ${address.addressByUser[index]['province']}"),
                               ],
                             ),
                           ),

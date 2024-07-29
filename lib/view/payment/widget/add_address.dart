@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:fashion_store/components/loading.dart';
+import 'package:fashion_store/provider/payment_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 
 class AddAddress extends StatefulWidget {
   const AddAddress({super.key});
@@ -15,6 +18,7 @@ class _AddAddressState extends State<AddAddress> {
   final village = TextEditingController();
   final district = TextEditingController();
   final province = TextEditingController();
+  final detail = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -184,42 +188,82 @@ class _AddAddressState extends State<AddAddress> {
                 ),
               ),
             ),
-            userLocation == null
-                ? Center(child: CircularProgressIndicator())
-                : Container(
-                    height: 120,
-                    decoration: BoxDecoration(color: Colors.amber),
-                    child: GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                            userLocation!.latitude!, userLocation!.longitude!),
-                        zoom: 14,
-                      ),
-                      // markers: myMarKer(),
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: true,
-                    ),
-                  ),
+            SizedBox(height: 20),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Container(
-                height: 50,
+                height: 80,
                 decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: Text(
-                    "ບັນທຶກ",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.black)),
+                child: TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: detail,
+                  maxLines: 2,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
+                    hintText: "ລາຍລະອຽດອື່ນໆ",
+                    border: InputBorder.none,
                   ),
                 ),
               ),
             ),
+            SizedBox(height: 10),
+            userLocation == null
+                ? Center(child: CircularProgressIndicator())
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 200,
+                      decoration: BoxDecoration(color: Colors.amber),
+                      child: GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(userLocation!.latitude!,
+                              userLocation!.longitude!),
+                          zoom: 14,
+                        ),
+                        // markers: myMarKer(),
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true,
+                      ),
+                    ),
+                  ),
+            Consumer<PaymentProvider>(builder: (context, address, child) {
+              return Padding(
+                padding: EdgeInsets.all(20),
+                child: GestureDetector(
+                  onTap: () {
+                    Loading(context);
+                    address.addAddress(
+                      village: village.text,
+                      district: district.text,
+                      province: province.text,
+                      detail: detail.text,
+                      latitude: userLocation!.latitude!,
+                      longitude: userLocation!.longitude!,
+                    );
+                  },
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "ບັນທຶກ",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
           ],
         ),
       ),

@@ -25,7 +25,7 @@ class PaymentService {
           options: Options(headers: {
             "Accept": "Application/json",
             "Content-Type": "multipart/json",
-            "Bearer": token['token']
+            'Authorization': "Bearer ${token['token']}"
           }));
       print(response);
       if (response.data['status'] == true) {
@@ -57,15 +57,15 @@ class PaymentService {
         "longitude": longitude.toString()
       };
       final response = await dio.post(
-        ApiPath.getBanner,
+        ApiPath.addAddress,
         data: data,
         options: Options(headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-          "Bearer": token['token']
+          // "Accept": "application/json",
+          // "Content-Type": "application/json",
+          'Authorization': "Bearer ${token['token']}"
         }),
       );
-      print(response);
+        print(response);
       if (response.data['status'] == true) {
         print(response.data['data']);
         return true;
@@ -83,9 +83,7 @@ class PaymentService {
       final response = await dio.get(
         ApiPath.getAllAddress,
         options: Options(
-          headers: {
-            "Bearer": token['token'],
-          },
+          headers: {'Authorization': "Bearer ${token['token']}"},
         ),
       );
       print(response);
@@ -101,21 +99,20 @@ class PaymentService {
   Future<List<dynamic>?> getByUser() async {
     try {
       final token = await HiveDatabase.getToken();
-       Map<String, String> headers = {
+      Map<String, String> headers = {
         'Content-type': 'application/json',
         'Accept': 'application/json',
         'Authorization': "Bearer ${token['token']}"
       };
- 
+
       final response = await http.get(
         Uri.parse(ApiPath.getAddressByUser),
         headers: headers,
       );
 
-     
       final newData = jsonDecode(response.body);
       if (newData['status'] == true) {
-         print(newData['data']);
+        print(newData['data']);
         return newData['data'];
       }
 
@@ -132,7 +129,7 @@ class PaymentService {
         ApiPath.getOneAddress + id,
         options: Options(
           headers: {
-            "Bearer": token['token'],
+            "Bearer ": token['token'],
           },
         ),
       );

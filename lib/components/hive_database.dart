@@ -44,6 +44,20 @@ class HiveDatabase {
     }
   }
 
+  static Future<bool?> deleteAll() async {
+    try {
+      final userBox = await box!.openBox<Map>('auth');
+      await userBox.deleteAll([
+        'profile',
+        'tokens',
+      ]);
+
+      return true;
+    } catch (e) {
+      return null;
+    }
+  }
+
   static Future<bool?> updateAmount({required int amount}) async {
     try {
       final myBox = await Hive.openBox<Map>('cart');
@@ -95,7 +109,7 @@ class HiveDatabase {
         "token": token,
         "refreshToken": refreshToken,
       });
-      
+
       return true;
     } catch (e) {
       print(e);

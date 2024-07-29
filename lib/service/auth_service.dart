@@ -45,6 +45,20 @@ class AuthService {
       return false;
     }
   }
+   Future<bool> logout() async {
+    try {
+      final result = await HiveDatabase.deleteAll();
+      
+      if (result != true) {
+        return false;
+      }
+     
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
   Future<dynamic>? login({
     required String phoneNumber,
     required String password,

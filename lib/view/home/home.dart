@@ -1,3 +1,5 @@
+import 'package:fashion_store/components/loading.dart';
+import 'package:fashion_store/provider/auth_provider.dart';
 import 'package:fashion_store/provider/category_provider.dart';
 import 'package:fashion_store/view/home/widget/appbarWidget.dart';
 import 'package:fashion_store/view/home/widget/banner.dart';
@@ -46,29 +48,48 @@ class _HomeViewState extends State<HomeView> {
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.green,
-              child: Icon(
-                Icons.person,
-                size: 30,
-                color: Colors.white,
-              ),
-            ),
+          Consumer<AuthProvider>(
+            builder: (context,auth,child) {
+              return GestureDetector(
+                onTap: (){
+                
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.green,
+                    child: Icon(
+                      Icons.person,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              );
+            }
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.red,
-              child: Icon(
-                Icons.exit_to_app,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
+          Consumer<AuthProvider>(
+            builder: (context,auth,child) {
+              return GestureDetector(
+                onTap: (){
+                   auth.logout();
+                   Loading(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.red,
+                    child: Icon(
+                      Icons.exit_to_app,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              );
+            }
           ),
         ],
       ),
