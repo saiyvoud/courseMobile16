@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fashion_store/provider/auth_provider.dart';
 import 'package:fashion_store/provider/payment_provider.dart';
 import 'package:fashion_store/view/payment/widget/address.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class _PaymentState extends State<Payment> {
   void initState() {
     super.initState();
     _getUserLocation();
+    Provider.of<PaymentProvider>(context, listen: false)..getAddressInLocal();
+    Provider.of<AuthProvider>(context,listen: false)..getProfile();
   }
 
   final Completer<GoogleMapController> _controller =
@@ -55,6 +58,31 @@ class _PaymentState extends State<Payment> {
   Widget build(BuildContext context) {
     return Consumer<PaymentProvider>(
         builder: (context, paymentProvider, child) {
+      if (paymentProvider.loading == true) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.black,
+                )),
+            title: Text(
+              'payment',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+            centerTitle: true,
+          ),
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -97,44 +125,43 @@ class _PaymentState extends State<Payment> {
                   ],
                 ),
                 SizedBox(height: 10),
-                // Consumer<AuthProvider>(builder: (_, authProvider, __) {
-                //   if (authProvider.loading == true) {
-                //     return CircularProgressIndicator();
-                //   }
-                //   return
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('ຊື່ ແລະ ນາມສະກຸນ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('firstname lastname',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                        ],
+                Consumer<AuthProvider>(builder: (_, authProvider, __) {
+                  if (authProvider.loading == true) {
+                    return CircularProgressIndicator();
+                  }
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('ຊື່ ແລະ ນາມສະກຸນ',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black)),
+                            Text('${authProvider.userData['firstName']} ${authProvider.userData['lastName']}',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black)),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('ເບີໂທຕິດຕໍ່',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('+856 20 96794376',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('ເບີໂທຕິດຕໍ່',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black)),
+                            Text('+856 ${authProvider.userData['phoneNumber']}',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black)),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                // }),
+                    ],
+                  );
+                }),
                 SizedBox(height: 10),
 
                 Container(
@@ -155,7 +182,7 @@ class _PaymentState extends State<Payment> {
                             fontWeight: FontWeight.bold,
                             color: Colors.black)),
                     Spacer(),
-                    paymentProvider.address == null
+                    paymentProvider.addresInLocal[0] == null
                         ? SizedBox()
                         : IconButton(
                             onPressed: () {
@@ -175,7 +202,7 @@ class _PaymentState extends State<Payment> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  if (address.address == null) {
+                  if (address.addresInLocal[0] == null) {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -210,7 +237,8 @@ class _PaymentState extends State<Payment> {
                             Text('ບ້ານ ເມືອງ ແຂວງ',
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black)),
-                            Text('ຫ້ວຍຫົງ ຈັນທະບູລີ ນະຄອນຫຼວງວຽງຈັນ',
+                            Text(
+                                '${address.addresInLocal[0]['village']} ${address.addresInLocal[0]['district']} ${address.addresInLocal[0]['province']}',
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black)),
                           ],

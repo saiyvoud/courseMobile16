@@ -86,23 +86,30 @@ class _AddressViewState extends State<AddressView> {
                     primary: false,
                     itemCount: address.addressByUser.length,
                     itemBuilder: (context, index) {
+                      final data = address.addressByUser;
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.green),
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.pin_drop_outlined),
-                                SizedBox(width: 10),
-                                Text(
-                                    "ບ້ານ ${address.addressByUser[index]['village']} ເມືອງ ${address.addressByUser[index]['district']} ${address.addressByUser[index]['province']}"),
-                              ],
+                        child: GestureDetector(
+                          onTap: (){
+                            address.saveAddress(data[index]);
+                            
+                          },
+                          child: Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: Colors.green),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.pin_drop_outlined),
+                                  SizedBox(width: 10),
+                                  Text(
+                                      "ບ້ານ ${address.addressByUser[index]['village']} ເມືອງ ${address.addressByUser[index]['district']} ${address.addressByUser[index]['province']}"),
+                                ],
+                              ),
                             ),
                           ),
                         ),

@@ -45,6 +45,14 @@ class AuthService {
       return false;
     }
   }
+  Future<dynamic> getProfile()async{
+    try {
+      final result = await HiveDatabase.getProfile();
+       return result;
+    } catch (e) {
+      
+    }
+  }
    Future<bool> logout() async {
     try {
       final result = await HiveDatabase.deleteAll();

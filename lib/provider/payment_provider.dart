@@ -17,8 +17,10 @@ class PaymentProvider extends ChangeNotifier {
   dynamic _address;
   List<dynamic> _addressByUser = [];
   List<dynamic> _addresies = [];
+  List<dynamic> _addresInLocal = [];
   List<dynamic> get addresies => _addresies;
   List<dynamic> get addressByUser => _addressByUser;
+  List<dynamic> get addresInLocal => _addresInLocal;
   get address => _address;
 
   Future<void> payment({
@@ -34,6 +36,40 @@ class PaymentProvider extends ChangeNotifier {
       );
       if (result == true) {
         _loading = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getAddressInLocal() async {
+    _loading = true;
+    try {
+      final result = await paymentService.getAddressInLocal();
+      print(result);
+      if (result!.length > 0) {
+        
+        _loading = false;
+        _addresInLocal = result;
+        notifyListeners();
+      }
+    } catch (e) {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> saveAddress(dynamic data) async {
+    _loading = true;
+    try {
+      final result = await paymentService.saveAddress(data);
+      if (result == true) {
+        _loading = false;
+        MessageHepler.showSnackBarMessage(
+            isSuccess: true, message: "save address success");
+            getAddressInLocal();
         notifyListeners();
       }
     } catch (e) {
@@ -68,7 +104,7 @@ class PaymentProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-        MessageHepler.showSnackBarMessage(isSuccess: false, message: "Faild");
+      MessageHepler.showSnackBarMessage(isSuccess: false, message: "Faild");
       _loading = false;
       notifyListeners();
     }

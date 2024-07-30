@@ -10,7 +10,7 @@ class HiveDatabase {
     Directory directory = await getApplicationDocumentsDirectory();
     box = await BoxCollection.open(
       'mobileDB', // Name of your database
-      {'auth', 'cart'}, // Names of your boxes
+      {'auth', 'cart', 'address'}, // Names of your boxes
       path: directory.path,
     );
     return box;
@@ -19,9 +19,10 @@ class HiveDatabase {
   // ------- get -------
   static Future<dynamic> getProfile() async {
     final userBox = await box!.openBox<Map>('auth');
-    final data = await userBox.getAll(['profile']);
+    final data = await userBox.getAll(['user']);
+    print("=====>$data");
     final respone = jsonDecode(data[0]!['data']);
-    print(respone);
+   print("=====>$respone");
     return respone;
   }
 
@@ -113,6 +114,24 @@ class HiveDatabase {
       return true;
     } catch (e) {
       print(e);
+      return null;
+    }
+  }
+  static Future<List<dynamic>?> getAddressInLocal()async{
+    try {
+      final address = await box!.openBox<Map>("address");
+      final data = await address.getAll(['address']);
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+  static Future<bool?> saveAddress(dynamic data) async {
+    try {
+      final address = await box!.openBox<Map>("address");
+      await address.put("address", data);
+      return true;
+    } catch (e) {
       return null;
     }
   }

@@ -38,6 +38,31 @@ class PaymentService {
     }
   }
 
+  Future<List<dynamic>?> getAddressInLocal() async {
+    try {
+      final result = await HiveDatabase.getAddressInLocal();
+      if (result!.length > 0) {
+        print("result====>$result");
+        return result;
+      }
+      return null;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool?> saveAddress(dynamic data) async {
+    try {
+      final result = await HiveDatabase.saveAddress(data);
+      if (result != true) {
+        return false;
+      }
+      return result;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<bool?> addAddress({
     required String village,
     required String district,
@@ -65,7 +90,7 @@ class PaymentService {
           'Authorization': "Bearer ${token['token']}"
         }),
       );
-        print(response);
+      print(response);
       if (response.data['status'] == true) {
         print(response.data['data']);
         return true;

@@ -22,6 +22,19 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> getProfile() async {
+    _loading = true;
+    try {
+      final result = await authService.getProfile();
+      _loading = false;
+      _userData = result;
+      notifyListeners();
+    } catch (e) {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> logout() async {
     _loading = true;
     try {
@@ -31,7 +44,6 @@ class AuthProvider extends ChangeNotifier {
       if (result == true) {
         _loading = false;
         navService.pushNamed(RouteAPI.login);
-        
       }
     } catch (e) {
       _loading = false;
