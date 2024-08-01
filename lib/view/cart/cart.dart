@@ -60,7 +60,7 @@ class _CartState extends State<Cart> {
                 itemCount: cartProvider.carts.length,
                 itemBuilder: (context, index) {
                   final data = cartProvider.carts;
-                 
+
                   cartProvider.calulatorSum(
                       data[index]['amount'], data[index]['price']);
                   return Column(
@@ -173,7 +173,9 @@ class _CartState extends State<Cart> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Payment(),
+                        builder: (context) => Payment(
+                          cart: cartProvider.carts,
+                        ),
                       ),
                     );
                   },

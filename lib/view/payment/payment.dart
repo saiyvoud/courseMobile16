@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:fashion_store/components/loading.dart';
 import 'package:fashion_store/provider/auth_provider.dart';
 import 'package:fashion_store/provider/payment_provider.dart';
 import 'package:fashion_store/view/payment/widget/address.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 class Payment extends StatefulWidget {
-  const Payment({super.key});
+  final List<dynamic> cart;
+  const Payment({super.key,required this.cart});
 
   @override
   State<Payment> createState() => _PaymentState();
@@ -21,9 +25,12 @@ class _PaymentState extends State<Payment> {
     super.initState();
     _getUserLocation();
     Provider.of<PaymentProvider>(context, listen: false)..getAddressInLocal();
-    Provider.of<AuthProvider>(context,listen: false)..getProfile();
+    Provider.of<AuthProvider>(context, listen: false)..getProfile();
   }
 
+  final ImagePicker _picker = ImagePicker();
+  File? _files;
+  XFile? _image;
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   late bool _serviceEnabled;
@@ -52,6 +59,45 @@ class _PaymentState extends State<Payment> {
     setState(() {
       userLocation = locationData;
     });
+  }
+
+  // Future<File> getImage() async {
+  //   final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+  //   if (image == null) {}
+  //   // setState(() {
+  //   //   _image = image;
+  //   // });
+  //   var file = File(image!.path);
+  //   return file;
+  // }
+
+  Future<File?> pickCamera() async {
+    try {
+      final XFile? xImage = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+      );
+
+      if (xImage == null) {}
+      var image = File(xImage!.path);
+      print(image);
+      return image;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<File?> pickGallery() async {
+    try {
+      final XFile? xImage = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
+      if (xImage == null) {}
+      var image = File(xImage!.path);
+      return image;
+    } catch (e) {
+      return null;
+    }
   }
 
   @override
@@ -120,8 +166,8 @@ class _PaymentState extends State<Payment> {
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                             color: Colors.black)),
-                    Spacer(),
-                    Icon(Icons.edit, color: Colors.green),
+                    // Spacer(),
+                    // Icon(Icons.edit, color: Colors.green),
                   ],
                 ),
                 SizedBox(height: 10),
@@ -139,7 +185,8 @@ class _PaymentState extends State<Payment> {
                             Text('ຊື່ ແລະ ນາມສະກຸນ',
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black)),
-                            Text('${authProvider.userData['firstName']} ${authProvider.userData['lastName']}',
+                            Text(
+                                '${authProvider.userData['firstName']} ${authProvider.userData['lastName']}',
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black)),
                           ],
@@ -261,55 +308,6 @@ class _PaymentState extends State<Payment> {
                                 myLocationButtonEnabled: true,
                               ),
                             )
-                      // Container(
-                      //   height: 120,
-                      //   decoration: BoxDecoration(color: primaryColors),
-                      //   child: GoogleMap(
-                      //     initialCameraPosition: CameraPosition(
-                      //       target: LatLng(
-                      //         double.parse(
-                      //           addressProvider.address.latitude!,
-                      //         ),
-                      //         double.parse(
-                      //           addressProvider.address.longtitude!,
-                      //         ),
-                      //       ),
-                      //       zoom: 14,
-                      //     ),
-                      //     markers: <Marker>[
-                      //       Marker(
-                      //         markerId: MarkerId('MarkerId'),
-                      //         position: LatLng(
-                      //           double.parse(
-                      //             addressProvider.address.latitude!,
-                      //           ),
-                      //           double.parse(
-                      //             addressProvider.address.longtitude!,
-                      //           ),
-                      //         ),
-                      //         icon: icon!,
-                      //         infoWindow: InfoWindow(
-                      //             title: 'This is a Title',
-                      //             snippet: 'this is a snippet'),
-                      //       ),
-                      //     ].toSet(),
-                      //   ),
-                      // ),
-
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 5),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       Text('ປະເພດທີ່ຢູ່ອາໄສ',
-                      //           style: TextStyle(
-                      //               fontSize: 12, color: Colors.black)),
-                      //       Text('ບ້ານ',
-                      //           style: TextStyle(
-                      //               fontSize: 12, color: Colors.black)),
-                      //     ],
-                      //   ),
-                      // ),
                     ],
                   );
                 }),
@@ -402,14 +400,123 @@ class _PaymentState extends State<Payment> {
                           Text('ລາຄາລວມ',
                               style:
                                   TextStyle(fontSize: 12, color: Colors.black)),
-                          // Text('${widget.productModel.price} Kip',
-                          //     style:
-                          //         TextStyle(fontSize: 15, color: Colors.red)),
+                          Text('200,000 Kip',
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.red)),
                         ],
                       ),
                     ),
                   ],
                 ),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.list_alt,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 5),
+                    Text('ລາຍລະອຽດການຊຳລະ',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black)),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: Image.asset(
+                    "assets/images/onepay.png",
+                    height: 220,
+                    width: 220,
+                  ),
+                ),
+                SizedBox(height: 20),
+                _files == null
+                    ? Center(
+                        child: Container(
+                          height: 160,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 160,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: Icon(
+                                      Icons.cloud_upload,
+                                      size: 30,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Drag&Drop files here",
+                                    style: TextStyle(
+                                      color: Colors.greenAccent,
+                                    ),
+                                  ),
+                                  Text(
+                                    "or",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showAlert(context);
+                                    },
+                                    child: Container(
+                                      height: 25,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.blue),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Browse Files",
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            showAlert(context);
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 15),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(
+                              _files!,
+                              height: 140,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )),
                 //   );
                 // });
                 // })
@@ -419,18 +526,30 @@ class _PaymentState extends State<Payment> {
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Container(
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.amber,
-            ),
-            child: Center(
-              child: Text(
-                'ຊຳລະເງີນ',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+          child: GestureDetector(
+            onTap: () {
+              Loading(context);
+              paymentProvider.payment(
+                addressId: paymentProvider.addresInLocal[0]['_id'],
+                totalPrice: 1000000,
+                billQR: _files!,
+                products: widget.cart,
+                
+              );
+            },
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.amber,
+              ),
+              child: Center(
+                child: Text(
+                  'ຊຳລະເງີນ',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -438,5 +557,77 @@ class _PaymentState extends State<Payment> {
         ),
       );
     });
+  }
+
+  void showAlert(context) async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('ອັບໂຫລດຮູບພາບ'),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    try {
+                      _files = await pickCamera();
+                      // final cropImage =
+                      //     await cubit.cropImage(imageFile: files!);
+                      // File fileName = File(cropImage!.path);
+                      setState(() {
+                        _files;
+                      });
+                    } catch (e) {}
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.camera_alt,
+                        size: 25,
+                        color: Colors.black,
+                      ),
+                      SizedBox(width: 5),
+                      Text('ຖ່າຍຮູບພາບ'),
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    try {
+                      _files = await pickGallery();
+                      // final cropImage =
+                      //     await cubit.cropImage(imageFile: files!);
+                      // File fileName = File(cropImage!.path);
+                      setState(() {
+                        _files;
+                      });
+                    } catch (e) {}
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.photo_library,
+                        size: 25,
+                      ),
+                      SizedBox(width: 5),
+                      Text('ເລືອກຮູບພາບ'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Close',
+                    style: TextStyle(color: Colors.red),
+                  )),
+            ],
+          );
+        });
   }
 }

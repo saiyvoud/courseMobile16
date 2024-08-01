@@ -8,29 +8,49 @@ import 'package:http/http.dart' as http;
 
 class PaymentService {
   final dio = new Dio();
+
   Future<bool?> payment({
-    required String orderId,
+    required String addressId,
     required int totalPrice,
     required File billQR,
+    required List<dynamic> products,
   }) async {
     try {
       final token = await HiveDatabase.getToken();
-      var formData = FormData.fromMap({
-        'order_id': orderId,
-        'totalPrice': totalPrice,
-        'billQR': await MultipartFile.fromFile(billQR.path)
-      });
-      final response = await dio.post(ApiPath.payment,
-          data: formData,
-          options: Options(headers: {
-            "Accept": "Application/json",
-            "Content-Type": "multipart/json",
-            'Authorization': "Bearer ${token['token']}"
-          }));
-      print(response);
-      if (response.data['status'] == true) {
-        print(response.data['data']);
-        return true;
+
+      Map<String, String> header = {
+        'Content-type': 'multipart/form-data',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${token['token']}',
+      };
+      final url = Uri.parse(ApiPath.addOrder);
+      final request = http.MultipartRequest('POST', url);
+      request.headers.addAll(header);
+
+      request.fields['addressId'] = addressId.toString();
+      request.fields['totalPrice'] = totalPrice.toString();
+      final file = await http.MultipartFile.fromPath('billQR', billQR.path);
+      request.files.add(file);
+
+      for (int i = 0; i < products.length; i++) {
+        request.fields.addAll({
+          "products[${i}][productId]": products[i]['productId'].toString(),
+          "products[${i}][name]": products[i]['name'].toString(),
+          "products[${i}][detail]": products[i]['detail'].toString(),
+          "products[${i}][amount]": products[i]['amount'].toString(),
+          "products[${i}][price]": products[i]['price'].toString(),
+          "products[${i}][size]": products[i]['size'].toString(),
+          "products[${i}][image]": products[i]['image'].toString(),
+        });
+      }
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // final Map<String, dynamic> responseData = json.decode(response.body);
+        var data = json.decode(response.body);
+        print("data=====>${data}");
+
+        //  return order;
       }
       return null;
     } catch (e) {

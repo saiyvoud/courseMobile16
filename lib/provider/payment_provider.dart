@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:fashion_store/components/messageHelper.dart';
 import 'package:fashion_store/service/payment_service.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:no_context_navigation/no_context_navigation.dart';
 
 class PaymentProvider extends ChangeNotifier {
@@ -22,24 +23,29 @@ class PaymentProvider extends ChangeNotifier {
   List<dynamic> get addressByUser => _addressByUser;
   List<dynamic> get addresInLocal => _addresInLocal;
   get address => _address;
-
+  
+ 
   Future<void> payment({
-    required String orderId,
+    required String addressId,
     required int totalPrice,
     required File billQR,
+    required List<dynamic> products,
   }) async {
     try {
       final result = await paymentService.payment(
-        orderId: orderId,
+        addressId: addressId,
         totalPrice: totalPrice,
         billQR: billQR,
+        products: products
       );
       if (result == true) {
         _loading = false;
+        MessageHepler.showSnackBarMessage(isSuccess: true,message: "Success");
         notifyListeners();
       }
     } catch (e) {
       _loading = false;
+       MessageHepler.showSnackBarMessage(isSuccess: false,message: e);
       notifyListeners();
     }
   }

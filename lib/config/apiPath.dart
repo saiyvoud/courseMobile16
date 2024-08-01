@@ -22,6 +22,7 @@ class ApiPath {
   static String getAddressByUser = "${baseUrl}/address/getByUser";
   // -------- payment ------
   static String payment = "${baseUrl}/payment/insert";
+  static String addOrder = "${baseUrl}/order/insert";
   static String getOrder = "${baseUrl}/order/getAll";
   static String getOneOrder = "${baseUrl}/order/getOne/";
   static String getOrderByStatus = "${baseUrl}/order/status";
