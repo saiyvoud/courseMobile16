@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fashion_store/components/messageHelper.dart';
+import 'package:fashion_store/router/router.dart';
 import 'package:fashion_store/service/payment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,13 +39,17 @@ class PaymentProvider extends ChangeNotifier {
         billQR: billQR,
         products: products
       );
+      navService.goBack();
       if (result == true) {
         _loading = false;
         MessageHepler.showSnackBarMessage(isSuccess: true,message: "Success");
+        navService.pushNamed(RouteAPI.home);
+         
         notifyListeners();
       }
     } catch (e) {
       _loading = false;
+     // navService.goBack();
        MessageHepler.showSnackBarMessage(isSuccess: false,message: e);
       notifyListeners();
     }

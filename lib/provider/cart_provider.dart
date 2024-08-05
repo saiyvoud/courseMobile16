@@ -12,22 +12,27 @@ class CartProvider extends ChangeNotifier {
   get total => _total;
   List<dynamic> get carts => _carts;
 
- calulatorSum(int amount, int price) {
+  calulatorSum(int amount, int price) {
     _total += amount * price;
     //notifyListeners();
   }
+
   clearSum() {
     _total = 0;
-    
   }
+
   Future<void> getCart() async {
     _loading = true;
-
+     _total = 0;
     try {
-     
       final result = await cartService.getCart();
-     
+
       if (result!.length > 0) {
+        for (int i = 0; i < result.length; i++) {
+          _total += int.parse(result[i]['amount'].toString()) *
+              int.parse(result[i]['price'].toString());
+        }
+        _total;
         _loading = false;
         _carts = result;
         notifyListeners();
@@ -37,8 +42,6 @@ class CartProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-
 
   Future<void> deleteCart({required int id}) async {
     _loading = true;

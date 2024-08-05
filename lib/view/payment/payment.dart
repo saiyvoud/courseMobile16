@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:fashion_store/components/loading.dart';
 import 'package:fashion_store/provider/auth_provider.dart';
+import 'package:fashion_store/provider/cart_provider.dart';
 import 'package:fashion_store/provider/payment_provider.dart';
 import 'package:fashion_store/view/payment/widget/address.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,8 @@ import 'package:provider/provider.dart';
 
 class Payment extends StatefulWidget {
   final List<dynamic> cart;
-  const Payment({super.key,required this.cart});
+  final int totalPrice;
+  const Payment({super.key, required this.cart, required this.totalPrice});
 
   @override
   State<Payment> createState() => _PaymentState();
@@ -334,80 +336,87 @@ class _PaymentState extends State<Payment> {
                   ],
                 ),
 
-                // Consumer<CartProvider>(builder: (_, cartProvider, __) {
-                //   if (cartProvider.loading == true) {
-                //     return CircularProgressIndicator();
-                //   }
-                //   return ListView.builder(
-                //       shrinkWrap: true,
-                //       primary: false,
-                //       itemCount: cartProvider.carts.length,
-                //       itemBuilder: (context, index) {
-
-                //         return
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('ຮູບສິນຄ້າ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('ຊື່',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('ຈຳນວນ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('ລາຄາ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Image.network(
-                            "https://img.lazcdn.com/g/p/cbee361b3903691ad5aa656897bfb991.png_200x200q80.png_.webp",
-                            height: 20,
-                            fit: BoxFit.cover,
-                          ),
-                          Text('name',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('2',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.green)),
-                          Text('100,000 LAK',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.red)),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('ລາຄາລວມ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('200,000 Kip',
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.red)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                Consumer<CartProvider>(builder: (_, cartProvider, __) {
+                  if (cartProvider.loading == true) {
+                    return CircularProgressIndicator();
+                  }
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      itemCount: cartProvider.carts.length,
+                      itemBuilder: (context, index) {
+                        final carts = cartProvider.carts;
+                        return Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('ຮູບສິນຄ້າ',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black)),
+                                  Text('ຊື່',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black)),
+                                  Text('ຈຳນວນ',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black)),
+                                  Text('ລາຄາ',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Image.network(
+                                    carts[index]['image'],
+                                    height: 20,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  Text(carts[index]['name'],
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black)),
+                                  Text(carts[index]['amount'].toString(),
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.green)),
+                                  Text('${carts[index]['price']} LAK',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.red)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('ລາຄາລວມ',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black)),
+                                  Text('${widget.totalPrice} Kip',
+                                      style: TextStyle(
+                                          fontSize: 15, color: Colors.red)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      });
+                }),
                 SizedBox(height: 20),
                 Row(
                   children: [
@@ -531,10 +540,9 @@ class _PaymentState extends State<Payment> {
               Loading(context);
               paymentProvider.payment(
                 addressId: paymentProvider.addresInLocal[0]['_id'],
-                totalPrice: 1000000,
+                totalPrice: widget.totalPrice,
                 billQR: _files!,
                 products: widget.cart,
-                
               );
             },
             child: Container(

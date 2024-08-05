@@ -34,8 +34,8 @@ class _MultiProductState extends State<MultiProduct> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => HomeDetail(
-                    image: product.product[index]['image'],
-                    data: product.product[index],
+                    image: product.productBy[index]['image'],
+                    data: product.productBy[index],
                   ),
                 ),
               );
@@ -50,7 +50,7 @@ class _MultiProductState extends State<MultiProduct> {
                   children: [
                     Image.network(
                       // "https://img.lazcdn.com/g/p/cbee361b3903691ad5aa656897bfb991.png_200x200q80.png_.webp",
-                      product.product[index]['image'],
+                      product.productBy[index]['image'],
                       fit: BoxFit.cover,
                     ),
                     Padding(

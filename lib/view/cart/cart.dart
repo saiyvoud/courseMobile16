@@ -61,8 +61,7 @@ class _CartState extends State<Cart> {
                 itemBuilder: (context, index) {
                   final data = cartProvider.carts;
 
-                  cartProvider.calulatorSum(
-                      data[index]['amount'], data[index]['price']);
+                 
                   return Column(
                     children: [
                       Container(
@@ -157,7 +156,7 @@ class _CartState extends State<Cart> {
                     ),
                     Spacer(),
                     Text(
-                      "${cartProvider.total} LAK",
+                      "${cartProvider.total.toString()} LAK",
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -175,6 +174,7 @@ class _CartState extends State<Cart> {
                       MaterialPageRoute(
                         builder: (context) => Payment(
                           cart: cartProvider.carts,
+                          totalPrice: cartProvider.total,
                         ),
                       ),
                     );

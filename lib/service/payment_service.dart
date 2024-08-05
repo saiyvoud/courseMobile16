@@ -20,7 +20,6 @@ class PaymentService {
 
       Map<String, String> header = {
         'Content-type': 'multipart/form-data',
-        'Accept': 'application/json',
         'Authorization': 'Bearer ${token['token']}',
       };
       final url = Uri.parse(ApiPath.addOrder);
@@ -29,28 +28,30 @@ class PaymentService {
 
       request.fields['addressId'] = addressId.toString();
       request.fields['totalPrice'] = totalPrice.toString();
+      request.fields['products'] = jsonEncode(products);
       final file = await http.MultipartFile.fromPath('billQR', billQR.path);
       request.files.add(file);
 
-      for (int i = 0; i < products.length; i++) {
-        request.fields.addAll({
-          "products[${i}][productId]": products[i]['productId'].toString(),
-          "products[${i}][name]": products[i]['name'].toString(),
-          "products[${i}][detail]": products[i]['detail'].toString(),
-          "products[${i}][amount]": products[i]['amount'].toString(),
-          "products[${i}][price]": products[i]['price'].toString(),
-          "products[${i}][size]": products[i]['size'].toString(),
-          "products[${i}][image]": products[i]['image'].toString(),
-        });
-      }
+      // for (int i = 0; i < products.length; i++) {
+      //   request.fields.addAll({
+      //     "products[${i}][productId]": products[i]['productId'].toString(),
+      //     "products[${i}][name]": products[i]['name'].toString(),
+      //     "products[${i}][detail]": products[i]['detail'].toString(),
+      //     "products[${i}][amount]": products[i]['amount'].toString(),
+      //     "products[${i}][price]": products[i]['price'].toString(),
+      //     "products[${i}][size]": products[i]['size'].toString(),
+      //     "products[${i}][image]": products[i]['image'].toString(),
+      //   });
+      // }
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
+       
       if (response.statusCode == 201 || response.statusCode == 200) {
         // final Map<String, dynamic> responseData = json.decode(response.body);
         var data = json.decode(response.body);
         print("data=====>${data}");
 
-        //  return order;
+         return true;
       }
       return null;
     } catch (e) {
