@@ -1,3 +1,4 @@
+import 'package:fashion_store/components/drawer_component.dart';
 import 'package:fashion_store/view/auth/login.dart';
 import 'package:fashion_store/view/auth/register.dart';
 import 'package:fashion_store/view/home/home.dart';
@@ -27,7 +28,7 @@ class RouteAPI {
         );
         case home:
         return MaterialPageRoute(
-          builder: (context) => const HomeView(),
+          builder: (context) => const DrawerComponent(),
         );
 
       default:

@@ -89,7 +89,10 @@ class HiveDatabase {
     required String data,
   }) async {
     try {
+     
       final userBox = await box!.openBox<Map>('auth');
+   
+     
       await userBox.put("user", {
         "data": data,
       });
@@ -99,7 +102,7 @@ class HiveDatabase {
       return null;
     }
   }
-
+   
   static Future<bool?> saveToken({
     required String token,
     required String refreshToken,

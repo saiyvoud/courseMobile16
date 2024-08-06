@@ -24,6 +24,9 @@ class ApiPath {
   static String payment = "${baseUrl}/payment/insert";
   static String addOrder = "${baseUrl}/order/insert";
   static String getOrder = "${baseUrl}/order/getAll";
+ // static String getOrder = "${baseUrl}/order/getAll";
   static String getOneOrder = "${baseUrl}/order/getOne/";
-  static String getOrderByStatus = "${baseUrl}/order/status";
+  static String getOrderByStatusAwait = "${baseUrl}/order/getOrderStatusAwait/";
+  static String getOrderByStatusPadding = "${baseUrl}/order/getOrderStatusPadding/";
+  static String getOrderByStatusSuccess = "${baseUrl}/order/getOrderStatusSuccess/";
 }

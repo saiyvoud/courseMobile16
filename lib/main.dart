@@ -3,6 +3,7 @@ import 'package:fashion_store/components/messageHelper.dart';
 import 'package:fashion_store/provider/auth_provider.dart';
 import 'package:fashion_store/provider/banner_provider.dart';
 import 'package:fashion_store/provider/category_provider.dart';
+import 'package:fashion_store/provider/order_provider.dart';
 import 'package:fashion_store/provider/payment_provider.dart';
 import 'package:fashion_store/provider/product_provider.dart';
 import 'package:fashion_store/router/router.dart';
@@ -34,6 +35,12 @@ void main() async {
       ),
       ChangeNotifierProvider(
         create: (_) => ProductProvider()..getProduct(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => OrderProvider()
+          ..getOrderByStatusAwait()
+          ..getOrderByStatusPadding()
+          ..getOrderByStatusSuccess(),
       ),
       ChangeNotifierProvider(create: (_) => CartProvider()),
       ChangeNotifierProvider(create: (_) => PaymentProvider()),

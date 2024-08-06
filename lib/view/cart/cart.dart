@@ -137,6 +137,7 @@ class _CartState extends State<Cart> {
                       ),
                     ],
                   );
+               
                 }),
         bottomNavigationBar: Container(
           height: 140,
