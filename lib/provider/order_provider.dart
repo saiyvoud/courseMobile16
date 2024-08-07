@@ -18,7 +18,7 @@ class OrderProvider extends ChangeNotifier {
       final result = await orderService.getOrderAwait();
       if (result!.length > 0) {
         _orderAwait = result;
-        _loading = true;
+        _loading = false;
         notifyListeners();
       }
     } catch (e) {
@@ -32,7 +32,7 @@ class OrderProvider extends ChangeNotifier {
       final result = await orderService.getOrderPadding();
       if (result!.length > 0) {
         _orderPadding = result;
-        _loading = true;
+         _loading = false;
         notifyListeners();
       }
     } catch (e) {
@@ -46,7 +46,7 @@ class OrderProvider extends ChangeNotifier {
       final result = await orderService.getOrderSuccess();
       if (result!.length > 0) {
         _orderSuccess = result;
-        _loading = true;
+          _loading = false;
         notifyListeners();
       }
     } catch (e) {
